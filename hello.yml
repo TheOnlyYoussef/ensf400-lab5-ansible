@@ -49,3 +49,42 @@
     command: forever start /node-app/app.js
     when: "forever_list.stdout.find('/node-app/app.js') == -1"
 
+
+# Load Balancer
+- name: Load Balancer
+  hosts: load-balancer
+  tasks:
+  - name: Install nginx
+    apk:
+     name: nginx
+     update_cache: yes
+     state: latest
+
+  - name: nignx directory is created
+    file:
+        path: /nginxconfig
+        state: directory
+
+  - name: copy config file
+    copy:
+      src: managed-host/load-balancer/nginx.conf
+      dest: /nginxconfig/nginx.conf
+
+  - name: mkdir
+    command: mkdir -p /run/nginx
+  
+  - name: nignx init
+    command: nginx
+  
+  - name: stop nignx
+    command: nginx -s stop 
+  
+
+  - name: start nignx
+    command:  nginx -c /nginxconfig/nginx.conf 
+
+
+
+
+  
+
