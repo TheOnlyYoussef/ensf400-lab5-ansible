@@ -5,6 +5,7 @@ from ansible.vars.manager import VariableManager
 from ansible.errors import AnsibleError
 from ansible import context
 from ansible.module_utils.common.collections import ImmutableDict
+import requests
 
 # Load inventory
 loader = DataLoader()
@@ -40,4 +41,26 @@ try:
     pb_executor.run()
 except AnsibleError as e:
     print("An error occurred while running the playbook:", e)
+
+
+
+response = requests.get('http://127.0.0.1:3000')
+if response.text != "Hello World from managedhost-app-1 !":
+   raise Exception("Return is not correct")
+print(response.text)
+
+response = requests.get('http://127.0.0.1:3001') 
+if response.text != "Hello World from managedhost-app-2 !":
+   raise Exception("Return is not correct")
+print(response.text)
+
+
+response = requests.get('http://127.0.0.1:3002') 
+if response.text != "Hello World from managedhost-app-3 !":
+   raise Exception("Return is not correct")
+print(response.text)
+
+
+
+
 
